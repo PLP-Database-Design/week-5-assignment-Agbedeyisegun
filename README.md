@@ -29,15 +29,96 @@ This demonstrates the cconnection of MySQL database and Node.js to create a simp
    // Question 1 goes here
 
 
+
+   server.get("/patients_info", (req,res) => {
+      const sql = `
+         SELECT patient_id, first_name, last_name, date_of_birth  
+         FROM patients`
+      db.query(sql, (error, data) => {
+         if(error){
+               console.log('error retrieving data', error)
+               return res.status(500).send('error retrieving data')
+         }
+         console.log('data retrieved successfully')
+         res.status(200).send({
+               message: ('Data Retrieved Successfully!'),
+               data: data
+         })
+      })
+   })
+
+
+
    // Question 2 goes here
+
+
+   
+   server.get("/providers_info", (req,res) => {
+    const sql = `
+        SELECT first_name, last_name, provider_specialty  
+        FROM providers`
+     db.query(sql, (error, data) => {
+        if(error){
+            console.log('error retrieving data', error)
+            return res.status(500).send('error retrieving data')
+        }
+        console.log('data retrieved successfully')
+        res.status(200).json({
+            message: ('Data Retrieved Successfully!'),
+            data: data
+        })
+     })
+   })
+
+
 
 
    // Question 3 goes here
 
 
+
+      
+   server.get("/patientsFirstName", (req,res) => {
+      const sql =
+         `SELECT * FROM providers
+         ORDER BY first_name;`
+      db.query(sql, (error, results) => {
+         if(error){
+               console.log('Error retrieving Patients First Name column', error.stack)
+               return res.status(500).send('Error retrieving Patients First Name column')
+         }
+         console.log('Patients First Name column retrieve successfully:')
+         res.status(200).json({
+               message:'Patients First Name column retrieve successfully:',
+               result: results
+         })
+      })
+   })
+
+
    // Question 4 goes here
 
    
+
+   server.get("/providers_specialty", (req,res) => {
+      const sql =
+         `SELECT * 
+         FROM providers
+         ORDER BY provider_specialty;`
+      db.query(sql, (error, results) => {
+         if(error){
+               console.log('Error retrieving provider_specialty column', error.stack)
+               return res.status(500).send('Error retrieving provider_specialty column')
+         }
+         console.log('provider_specialty column retrieve successfully:')
+         res.status(200).json({
+               message:'provider_specialty column retrieve successfully:',
+               results: results
+         })
+      })
+   })
+
+
 
    // listen to the server
    const PORT = 3000
